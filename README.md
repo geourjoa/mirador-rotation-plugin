@@ -1,12 +1,8 @@
 # mirador-rotation
 
-<!-- ![Node.js CI](https://github.com/ProjectMirador/mirador-rotation/workflows/Node.js%20CI/badge.svg)
-[![npm version](https://badge.fury.io/js/mirador-rotation.svg)](https://badge.fury.io/js/mirador-rotation) -->
-
+![Node.js CI](https://github.com/nakamura196/mirador-rotation-plugin/actions/workflows/node.js.yml/badge.svg)
 
 `mirador-rotation` is a [Mirador 3](https://github.com/projectmirador/mirador) plugin that enables the rotation of images at any angle.
-
-<!-- ![Mirador layer slideshow example](assets/demo.gif) -->
 
 <img src="assets/demo.gif" width="100%" title="Mirador rotation example">
 
@@ -29,7 +25,7 @@ const config = {
   id: 'demo',
   windows: [{
     rotationEnabled: true,
-    manifestId: 'https://gist.githubusercontent.com/nakamura196/0c6a28d03b34d18165bb0d4940673b7e/raw/9cf148fbf8df6cee43debaafd9a47d8757e9380a/kaishi.json',
+    manifestId: 'https://dl.ndl.go.jp/api/iiif/1286201/manifest.json',
   }]
 };
 ```

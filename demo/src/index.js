@@ -5,7 +5,7 @@ const config = {
   id: 'demo',
   windows: [{
     rotationEnabled: true,
-    manifestId: 'https://nakamura196.github.io/mirador2/data/examples/hi.json',
+    manifestId: 'https://dl.ndl.go.jp/api/iiif/1286201/manifest.json',
   }],
 };
 
