@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import LayersIcon from '@material-ui/icons/Layers';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import LayersIcon from '@mui/icons-material/Layers';
 
 const MiradorRotationMenuItem = ({
   enabled, handleClose, t, updateWindow, windowId,
@@ -19,7 +19,7 @@ const MiradorRotationMenuItem = ({
         <LayersIcon />
       </ListItemIcon>
       <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-        { enabled ? t('hide') : t('show') }
+        {enabled ? t('hide') : t('show')}
       </ListItemText>
     </MenuItem>
   );

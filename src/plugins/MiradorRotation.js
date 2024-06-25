@@ -1,196 +1,204 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import compose from 'lodash/flowRight';
-import TuneSharpIcon from '@material-ui/icons/TuneSharp';
-import CloseSharpIcon from '@material-ui/icons/CloseSharp';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import withStyles from '@material-ui/core/styles/withStyles';
-import withWidth from '@material-ui/core/withWidth';
+import { withSize } from 'react-sizeme';
 import { MiradorMenuButton } from 'mirador/dist/es/src/components/MiradorMenuButton';
-import LinearScaleIcon from '@material-ui/icons/LinearScale';
+
+import PropTypes from 'prop-types';
+
+import TuneSharpIcon from '@mui/icons-material/TuneSharp';
+import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+import { styled, alpha } from '@mui/material/styles';
+
+import ReplayIcon from '@mui/icons-material/Replay';
+import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import Rotation from './Rotation';
-import ImageSlideshow from './ImageSlideshow';
+
+const SizeContainer = styled('div')(() => ({
+  position: 'static !important',
+}));
+
+const ToggleContainer = styled('div')(() => ({
+  border: 0,
+  borderImageSlice: 1,
+}));
+
+const ToolContainer = styled('div')(() => ({
+  display: 'flex',
+  border: 0,
+  borderImageSlice: 1,
+}));
 
 /** Styles for withStyles HOC */
-const styles = ({ breakpoints, palette }) => {
+const Root = styled('div')(({ small, theme: { palette } }) => {
   const backgroundColor = palette.shades.main;
   const foregroundColor = palette.getContrastText(backgroundColor);
-  const border = `1px solid ${fade(foregroundColor, 0.2)}`;
+  const border = `1px solid ${alpha(foregroundColor, 0.2)}`;
   const borderImageRight = 'linear-gradient('
-    + 'to bottom, '
-    + `${fade(foregroundColor, 0)} 20%, `
-    + `${fade(foregroundColor, 0.2)} 20% 80%, `
-    + `${fade(foregroundColor, 0)} 80% )`;
+        + 'to bottom, '
+        + `${alpha(foregroundColor, 0)} 20%, `
+        + `${alpha(foregroundColor, 0.2)} 20% 80%, `
+        + `${alpha(foregroundColor, 0)} 80% )`;
   const borderImageBottom = borderImageRight.replace('to bottom', 'to right');
   return {
-    root: {
-      backgroundColor: fade(backgroundColor, 0.8),
-      borderRadius: 25,
-      position: 'absolute',
-      top: 8,
-      right: 8,
-      zIndex: 999,
-      display: 'flex',
-      flexDirection: 'row',
-      [breakpoints.down('sm')]: {
-        flexDirection: 'column',
-      },
+    backgroundColor: alpha(backgroundColor, 0.8),
+    borderRadius: 25,
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    zIndex: 999,
+    display: 'flex',
+    flexDirection: 'row',
+    ...(small && { flexDirection: 'column' }),
+    [ToggleContainer]: {
+      ...(small && {
+        borderBottom: border,
+        borderImageSource: borderImageBottom,
+        display: 'flex',
+      }),
     },
-    borderContainer: {
-      border: 0,
-      borderRight: border,
-      borderImageSlice: 1,
-      borderImageSource: borderImageRight,
-      display: 'flex',
-      flexDirection: 'row',
-      [breakpoints.down('sm')]: {
+    [ToolContainer]: {
+      ...(!small && {
+        borderRight: border,
+        borderImageSource: borderImageRight,
+        flexDirection: 'row',
+      }),
+      ...(small && {
         flexDirection: 'column',
         borderBottom: border,
-        borderRight: 'none',
         borderImageSource: borderImageBottom,
-      },
+      }),
     },
   };
-};
+});
 
 class MiradorRotation extends Component {
   constructor(props) {
     super(props);
     this.toggleState = this.toggleState.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
 
   handleChange() {
-    const {
-      updateViewport, windowId, updateRotation, rotation,
-    } = this.props;
+    const { updateWindow, windowId } = this.props;
 
     return (value) => {
-      updateViewport(windowId, { rotation });
-      updateRotation(value);
+      updateWindow(windowId, { rotation: value });
     };
   }
 
-  init() {
-    const { updateViewport, windowId, updateRotation } = this.props;
-    return () => {
-      updateViewport(windowId, { rotation: 0 });
-      updateRotation(0);
-    };
+  handleReset() {
+    const {
+      updateWindow, updateViewport, windowId,
+    } = this.props;
+
+    updateWindow(windowId, { rotation: 0 });
+    updateViewport(windowId, { rotation: 0 });
   }
 
   toggleState() {
-    const {
-      open, closeDialog,
-    } = this.props;
+    const { open, updateWindow, windowId } = this.props;
 
-    closeDialog(open);
+    updateWindow(windowId, { rotationOpen: !open });
   }
 
   render() {
     const {
-      classes, containerId, enabled, open, viewer, windowId, width,
-      theme: { palette },
-      t,
-      rotation,
+      size: { width }, t, enabled, open, viewer, containerId,
+      rotation, updateViewport, windowId, viewConfig,
     } = this.props;
 
     if (!viewer || !enabled) return null;
 
-    const backgroundColor = palette.shades.main;
-    const foregroundColor = palette.getContrastText(backgroundColor);
-    const isSmallDisplay = ['xs', 'sm'].indexOf(width) >= 0;
+    const isSmallDisplay = width && (width < 480);
+
+    const viewConfigRotation = viewConfig.rotation || 0;
+
+    if (rotation !== viewConfigRotation) {
+      updateViewport(windowId, { rotation });
+    }
 
     /** Button for toggling the menu */
     const toggleButton = (
-      <div className={(isSmallDisplay && open) ? classes.borderContainer : ''}>
+      <ToggleContainer>
         <MiradorMenuButton
           aria-expanded={open}
           aria-haspopup
           aria-label={t('collapse', { context: open ? 'open' : 'close' })}
-          containerId={containerId}
           onClick={this.toggleState}
         >
           {open ? <CloseSharpIcon /> : <TuneSharpIcon />}
         </MiradorMenuButton>
-      </div>
+      </ToggleContainer>
     );
+
     return (
-      <div className={`MuiPaper-elevation4 ${classes.root}`}>
-        {isSmallDisplay && toggleButton}
-        {open
-          && (
-            <React.Fragment>
-              <div className={classes.borderContainer}>
+      <SizeContainer>
+        <Root className="MuiPaper-elevation4" small={isSmallDisplay}>
+          {isSmallDisplay && toggleButton}
+          {open && (
+          <ToolContainer>
+            <Rotation
+              type="slider"
+              label={t('progress')}
+              min={-180}
+              max={180}
+              value={rotation}
+              containerId={containerId}
+              onChange={this.handleChange('rotation')}
+              small={isSmallDisplay}
+            >
+              <LinearScaleIcon />
+            </Rotation>
 
-                <Rotation
-                  type="slider"
-                  label={t('progress')}
-                  min={-180}
-                  max={180}
-                  windowId={windowId}
-                  value={rotation}
-                  onChange={this.handleChange('rotation')}
-                  foregroundColor={foregroundColor}
-                  containerId={containerId}
-                >
-                  <LinearScaleIcon />
-                </Rotation>
-
-                <ImageSlideshow
-                  containerId={containerId}
-                  label={t('init')}
-                  onClick={this.init()}
-                />
-              </div>
-            </React.Fragment>
+            <MiradorMenuButton
+              aria-label={t('init')}
+              onClick={this.handleReset}
+            >
+              <ReplayIcon />
+            </MiradorMenuButton>
+          </ToolContainer>
           )}
-        {!isSmallDisplay && toggleButton}
-      </div>
+          {!isSmallDisplay && toggleButton}
+        </Root>
+      </SizeContainer>
     );
   }
 }
 
-// onClick={() => this.start()}
-
 MiradorRotation.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   containerId: PropTypes.string.isRequired,
   enabled: PropTypes.bool,
   open: PropTypes.bool,
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  // updateViewport: PropTypes.func.isRequired,
-  // updateWindow: PropTypes.func.isRequired,
-  viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  windowId: PropTypes.string.isRequired,
-  width: PropTypes.oneOf(['lg', 'md', 'sm', 'xl', 'xs']).isRequired,
-
-  // state
-
   rotation: PropTypes.number,
-
-  closeDialog: PropTypes.func,
-  updateRotation: PropTypes.func,
-
-  updateViewport: PropTypes.func.isRequired,
+  t: PropTypes.func,
+  updateViewport: PropTypes.func,
+  updateWindow: PropTypes.func,
+  viewConfig: PropTypes.shape({
+    rotation: PropTypes.number,
+  }),
+  viewer: PropTypes.shape({
+    rotation: PropTypes.number,
+  }),
+  windowId: PropTypes.string.isRequired,
+  size: PropTypes.shape({
+    width: PropTypes.number,
+  }),
 };
 
 MiradorRotation.defaultProps = {
   enabled: true,
-  open: true,
-  viewer: undefined,
-
+  open: false,
   rotation: 0,
-
-  // dispatch
-
-  closeDialog: () => { },
-  updateRotation: () => { },
-
+  t: () => { },
+  updateViewport: () => { },
+  updateWindow: () => { },
+  viewConfig: {},
+  viewer: {},
+  size: {},
 };
 
 // Export without wrapping HOC for testing.
-export const TestableRotation = MiradorRotation;
+export const TestableMiradorRotation = MiradorRotation;
 
-export default compose(withStyles(styles), withWidth())(MiradorRotation);
+export default compose(withSize())(MiradorRotation);

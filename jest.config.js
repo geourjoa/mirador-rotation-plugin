@@ -1,17 +1,16 @@
-// For a detailed explanation regarding each configuration property, visit:
-// https://jestjs.io/docs/en/configuration.html
-
 module.exports = {
-  // Automatically clear mock calls and instances between every test
   clearMocks: true,
-
-  // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
-  setupFiles: [
-    '<rootDir>/setupJest.js',
-  ],
-  // Ignore Mirador code from jest transforms
+  setupFilesAfterEnv: ['<rootDir>/setupJest.js'],
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!mirador)',
+    'node_modules/(?!(mirador|@mui|dnd-core|@react-dnd|react-dnd)/)'
   ],
+  transform: {
+    '^.+\\.[t|j]sx?$': 'babel-jest'
+  },
+  moduleNameMapper: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
+  },
+  testEnvironment: 'jsdom',
+  testPathIgnorePatterns: ['<rootDir>/__tests__/test-utils.js'],
 };

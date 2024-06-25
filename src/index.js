@@ -1,1 +1,48 @@
-export miradorRotationPlugin from './plugins/miradorRotationPlugin';
+import withTheme from '@mui/styles/withTheme';
+import * as actions from 'mirador/dist/es/src/state/actions';
+import { getWindowConfig, getViewer, getContainerId } from 'mirador/dist/es/src/state/selectors';
+import MiradorRotation from './plugins/MiradorRotation';
+import MiradorRotationMenuItem from './plugins/MiradorRotationMenuItem';
+import translations from './translations';
+
+const mapStateToProps = (state, { windowId }) => {
+  const { windows } = state;
+
+  const canvasId = (windows[windowId] && windows[windowId].canvasId) || null;
+
+  return {
+    canvasId,
+    containerId: getContainerId(state),
+    enabled: getWindowConfig(state, { windowId }).rotationEnabled || false,
+    open: getWindowConfig(state, { windowId }).rotationOpen || false,
+    viewConfig: getViewer(state, { windowId }) || {},
+    rotation: getWindowConfig(state, { windowId }).rotation || 0,
+  };
+};
+
+export const miradorDisableZoomPlugin = [
+  {
+    target: 'OpenSeadragonViewer',
+    mode: 'add',
+    component: withTheme(MiradorRotation),
+    mapStateToProps,
+    mapDispatchToProps: {
+      updateWindow: actions.updateWindow,
+      updateViewport: actions.updateViewport,
+    },
+    config: {
+      translations,
+    },
+  },
+  {
+    target: 'WindowTopBarPluginMenu',
+    component: MiradorRotationMenuItem,
+    mode: 'add',
+    mapDispatchToProps: {
+      updateWindow: actions.updateWindow,
+    },
+    mapStateToProps: (state, { windowId }) => ({
+      enabled: getWindowConfig(state, { windowId }).rotationEnabled || false,
+    }),
+  },
+];
