@@ -18,7 +18,7 @@ describe('MiradorRotationMenuItem', () => {
       />,
     );
 
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'disableZoom');
+    expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'rotation');
     expect(screen.getByRole('button')).toContainElement(screen.getByTestId('LockIcon'));
   });
 
@@ -48,9 +48,9 @@ describe('MiradorRotationMenuItem', () => {
 
     const button = screen.getByRole('button');
     fireEvent.click(button);
-    expect(mockUpdateWindow).toHaveBeenCalledWith(windowId, { disableZoomEnabled: false });
+    expect(mockUpdateWindow).toHaveBeenCalledWith(windowId, { rotationEnabled: false });
 
     fireEvent.click(button);
-    expect(mockUpdateWindow).toHaveBeenCalledWith(windowId, { disableZoomEnabled: true });
+    expect(mockUpdateWindow).toHaveBeenCalledWith(windowId, { rotationEnabled: true });
   });
 });

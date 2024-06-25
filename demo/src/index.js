@@ -1,5 +1,5 @@
 import Mirador from 'mirador/dist/es/src/index';
-import { miradorRotationZoomPlugin } from '../../src';
+import { miradorRotationPlugin } from '../../src';
 
 const config = {
   id: 'demo',
@@ -22,5 +22,5 @@ const config = {
 };
 
 Mirador.viewer(config, [
-  ...miradorRotationZoomPlugin,
+  ...miradorRotationPlugin,
 ]);

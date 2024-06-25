@@ -1,4 +1,3 @@
-import withTheme from '@mui/styles/withTheme';
 import * as actions from 'mirador/dist/es/src/state/actions';
 import { getWindowConfig, getViewer, getContainerId } from 'mirador/dist/es/src/state/selectors';
 import MiradorRotation from './plugins/MiradorRotation';
@@ -20,11 +19,11 @@ const mapStateToProps = (state, { windowId }) => {
   };
 };
 
-export const miradorRotationZoomPlugin = [
+export const miradorRotationPlugin = [
   {
     target: 'OpenSeadragonViewer',
     mode: 'add',
-    component: withTheme(MiradorRotation),
+    component: MiradorRotation,
     mapStateToProps,
     mapDispatchToProps: {
       updateWindow: actions.updateWindow,
