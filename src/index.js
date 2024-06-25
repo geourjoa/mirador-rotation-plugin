@@ -20,7 +20,7 @@ const mapStateToProps = (state, { windowId }) => {
   };
 };
 
-export const miradorDisableZoomPlugin = [
+export const miradorRotationZoomPlugin = [
   {
     target: 'OpenSeadragonViewer',
     mode: 'add',

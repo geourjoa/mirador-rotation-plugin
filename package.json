@@ -1,6 +1,6 @@
 {
   "name": "mirador-rotation",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "mirador-rotation React component",
   "main": "lib/index.js",
   "module": "es/index.js",
