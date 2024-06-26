@@ -34,10 +34,10 @@ const Root = styled('div')(({ small, theme: { palette } }) => {
   const foregroundColor = palette.getContrastText(backgroundColor);
   const border = `1px solid ${alpha(foregroundColor, 0.2)}`;
   const borderImageRight = 'linear-gradient('
-        + 'to bottom, '
-        + `${alpha(foregroundColor, 0)} 20%, `
-        + `${alpha(foregroundColor, 0.2)} 20% 80%, `
-        + `${alpha(foregroundColor, 0)} 80% )`;
+    + 'to bottom, '
+    + `${alpha(foregroundColor, 0)} 20%, `
+    + `${alpha(foregroundColor, 0.2)} 20% 80%, `
+    + `${alpha(foregroundColor, 0)} 80% )`;
   const borderImageBottom = borderImageRight.replace('to bottom', 'to right');
   return {
     backgroundColor: alpha(backgroundColor, 0.8),
@@ -77,22 +77,29 @@ class MiradorRotation extends Component {
     this.toggleState = this.toggleState.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleReset = this.handleReset.bind(this);
+
+    this.state = {
+      rotation: 0,
+    };
   }
 
   handleChange() {
-    const { updateWindow, windowId } = this.props;
+    const { windowId, updateViewport } = this.props;
 
     return (value) => {
-      updateWindow(windowId, { rotation: value });
+      this.setState({ rotation: value });
+
+      updateViewport(windowId, { rotation: value });
     };
   }
 
   handleReset() {
     const {
-      updateWindow, updateViewport, windowId,
+      updateViewport, windowId,
     } = this.props;
 
-    updateWindow(windowId, { rotation: 0 });
+    this.setState({ rotation: 0 });
+
     updateViewport(windowId, { rotation: 0 });
   }
 
@@ -105,18 +112,13 @@ class MiradorRotation extends Component {
   render() {
     const {
       size: { width }, t, enabled, open, viewer, containerId,
-      rotation, updateViewport, windowId, viewConfig,
     } = this.props;
+
+    const { rotation } = this.state;
 
     if (!viewer || !enabled) return null;
 
     const isSmallDisplay = width && (width < 480);
-
-    const viewConfigRotation = viewConfig.rotation || 0;
-
-    if (rotation !== viewConfigRotation) {
-      updateViewport(windowId, { rotation });
-    }
 
     /** Button for toggling the menu */
     const toggleButton = (
@@ -137,27 +139,27 @@ class MiradorRotation extends Component {
         <Root className="MuiPaper-elevation4" small={isSmallDisplay}>
           {isSmallDisplay && toggleButton}
           {open && (
-          <ToolContainer>
-            <Rotation
-              type="slider"
-              label={t('progress')}
-              min={-180}
-              max={180}
-              value={rotation}
-              containerId={containerId}
-              onChange={this.handleChange('rotation')}
-              small={isSmallDisplay}
-            >
-              <LinearScaleIcon />
-            </Rotation>
+            <ToolContainer>
+              <Rotation
+                type="slider"
+                label={t('progress')}
+                min={-180}
+                max={180}
+                value={rotation}
+                containerId={containerId}
+                onChange={this.handleChange('rotation')}
+                small={isSmallDisplay}
+              >
+                <LinearScaleIcon />
+              </Rotation>
 
-            <MiradorMenuButton
-              aria-label={t('init')}
-              onClick={this.handleReset}
-            >
-              <ReplayIcon />
-            </MiradorMenuButton>
-          </ToolContainer>
+              <MiradorMenuButton
+                aria-label={t('init')}
+                onClick={this.handleReset}
+              >
+                <ReplayIcon />
+              </MiradorMenuButton>
+            </ToolContainer>
           )}
           {!isSmallDisplay && toggleButton}
         </Root>
@@ -170,7 +172,6 @@ MiradorRotation.propTypes = {
   containerId: PropTypes.string.isRequired,
   enabled: PropTypes.bool,
   open: PropTypes.bool,
-  rotation: PropTypes.number,
   t: PropTypes.func,
   updateViewport: PropTypes.func,
   updateWindow: PropTypes.func,
@@ -189,7 +190,6 @@ MiradorRotation.propTypes = {
 MiradorRotation.defaultProps = {
   enabled: true,
   open: false,
-  rotation: 0,
   t: () => { },
   updateViewport: () => { },
   updateWindow: () => { },
