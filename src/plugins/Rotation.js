@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { MiradorMenuButton } from 'mirador/dist/es/src/components/MiradorMenuButton';
+import { MiradorMenuButton } from '@nakamura196/mirador/dist/es/src/components/MiradorMenuButton';
 import Slider from '@mui/material/Slider';
 import { styled, alpha } from '@mui/material/styles';
 

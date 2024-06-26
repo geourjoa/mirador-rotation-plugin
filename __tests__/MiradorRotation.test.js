@@ -5,52 +5,47 @@ import MiradorRotationMenuItem from '../src/plugins/MiradorRotationMenuItem';
 
 describe('MiradorRotationMenuItem', () => {
   const mockUpdateWindow = jest.fn();
+  const mockHandleClose = jest.fn();
   const windowId = 'window-1';
   const t = (key) => key; // simplistic translation function for testing
 
-  it('should render lock icon when enabled', () => {
-    render(
-      <MiradorRotationMenuItem
-        enabled
-        t={t}
-        updateWindow={mockUpdateWindow}
-        windowId={windowId}
-      />,
-    );
-
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'rotation');
-    expect(screen.getByRole('button')).toContainElement(screen.getByTestId('LockIcon'));
-  });
-
-  it('should render lock open icon when not enabled', () => {
-    render(
-      <MiradorRotationMenuItem
-        enabled={false}
-        t={t}
-        updateWindow={mockUpdateWindow}
-        windowId={windowId}
-      />,
-    );
-
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'enableZoom');
-    expect(screen.getByRole('button')).toContainElement(screen.getByTestId('LockOpenIcon'));
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should toggle the enabled state on click', () => {
-    render(
+    const { rerender } = render(
       <MiradorRotationMenuItem
         enabled
+        handleClose={mockHandleClose}
         t={t}
         updateWindow={mockUpdateWindow}
         windowId={windowId}
       />,
     );
 
-    const button = screen.getByRole('button');
-    fireEvent.click(button);
+    // First click should disable
+    const menuItem = screen.getByRole('menuitem');
+    fireEvent.click(menuItem);
     expect(mockUpdateWindow).toHaveBeenCalledWith(windowId, { rotationEnabled: false });
+    expect(mockHandleClose).toHaveBeenCalled();
 
-    fireEvent.click(button);
+    // Reset mocks to clear call history
+    jest.clearAllMocks();
+
+    // Rerender with new "enabled" state as false
+    rerender(
+      <MiradorRotationMenuItem
+        enabled={false}
+        handleClose={mockHandleClose}
+        t={t}
+        updateWindow={mockUpdateWindow}
+        windowId={windowId}
+      />,
+    );
+
+    // Second click should enable
+    fireEvent.click(menuItem);
     expect(mockUpdateWindow).toHaveBeenCalledWith(windowId, { rotationEnabled: true });
   });
 });

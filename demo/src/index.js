@@ -1,4 +1,4 @@
-import Mirador from 'mirador/dist/es/src/index';
+import Mirador from '@nakamura196/mirador/dist/es/src/index';
 import { miradorRotationPlugin } from '../../src';
 
 const config = {

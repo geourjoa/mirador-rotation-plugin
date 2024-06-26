@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import compose from 'lodash/flowRight';
 import { withSize } from 'react-sizeme';
-import { MiradorMenuButton } from 'mirador/dist/es/src/components/MiradorMenuButton';
+import { MiradorMenuButton } from '@nakamura196/mirador/dist/es/src/components/MiradorMenuButton';
 
 import PropTypes from 'prop-types';
 
@@ -89,7 +89,7 @@ class MiradorRotation extends Component {
     return (value) => {
       this.setState({ rotation: value });
 
-      updateViewport(windowId, { rotation: value });
+      updateViewport(windowId, { rotation: value, immediately: true });
     };
   }
 
@@ -100,7 +100,7 @@ class MiradorRotation extends Component {
 
     this.setState({ rotation: 0 });
 
-    updateViewport(windowId, { rotation: 0 });
+    updateViewport(windowId, { rotation: 0, immediately: false });
   }
 
   toggleState() {

@@ -1,5 +1,5 @@
-import * as actions from 'mirador/dist/es/src/state/actions';
-import { getWindowConfig, getViewer, getContainerId } from 'mirador/dist/es/src/state/selectors';
+import * as actions from '@nakamura196/mirador/dist/es/src/state/actions';
+import { getWindowConfig, getViewer, getContainerId } from '@nakamura196/mirador/dist/es/src/state/selectors';
 import MiradorRotation from './plugins/MiradorRotation';
 import MiradorRotationMenuItem from './plugins/MiradorRotationMenuItem';
 import translations from './translations';

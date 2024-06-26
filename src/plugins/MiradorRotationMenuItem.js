@@ -6,7 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import LayersIcon from '@mui/icons-material/Layers';
 
 const MiradorRotationMenuItem = ({
-  enabled, handleClose, t, updateWindow, windowId,
+  enabled = true, handleClose, t, updateWindow, windowId,
 }) => {
   const handleClickOpen = () => {
     handleClose();
