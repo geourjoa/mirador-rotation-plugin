@@ -41,9 +41,6 @@ dependencies:
   redux-thunk:
     specifier: ^3.1.0
     version: 3.1.0(redux@5.0.1)
-  styles:
-    specifier: link:@mui/material/styles
-    version: link:@mui/material/styles
 
 devDependencies:
   '@babel/cli':
