@@ -100,7 +100,7 @@ class MiradorRotation extends Component {
 
     this.setState({ rotation: 0 });
 
-    updateViewport(windowId, { rotation: 0, immediately: false });
+    updateViewport(windowId, { rotation: 0, immediately: true });
   }
 
   toggleState() {
