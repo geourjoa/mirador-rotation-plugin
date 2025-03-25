@@ -15,6 +15,7 @@ const mapStateToProps = (state, { windowId }) => {
     enabled: getWindowConfig(state, { windowId }).rotationEnabled || false,
     open: getWindowConfig(state, { windowId }).rotationOpen || false,
     viewConfig: getViewer(state, { windowId }) || {},
+    rotation: getWindowConfig(state, { windowId }).rotation || 0,
   };
 };
 

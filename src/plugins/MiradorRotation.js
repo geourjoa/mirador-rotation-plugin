@@ -38,7 +38,6 @@ const Root = styled('div')(({ small, theme: { palette } }) => {
     + `${alpha(foregroundColor, 0)} 20%, `
     + `${alpha(foregroundColor, 0.2)} 20% 80%, `
     + `${alpha(foregroundColor, 0)} 80% )`;
-  const borderImageBottom = borderImageRight.replace('to bottom', 'to right');
   return {
     backgroundColor: alpha(backgroundColor, 0.8),
     borderRadius: 25,
@@ -51,8 +50,6 @@ const Root = styled('div')(({ small, theme: { palette } }) => {
     ...(small && { flexDirection: 'column' }),
     [ToggleContainer]: {
       ...(small && {
-        borderBottom: border,
-        borderImageSource: borderImageBottom,
         display: 'flex',
       }),
     },
@@ -64,8 +61,6 @@ const Root = styled('div')(({ small, theme: { palette } }) => {
       }),
       ...(small && {
         flexDirection: 'column',
-        borderBottom: border,
-        borderImageSource: borderImageBottom,
       }),
     },
   };
@@ -78,9 +73,23 @@ class MiradorRotation extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleReset = this.handleReset.bind(this);
 
+    // コンポーネントの初期化時に正しい回転値を設定
+    const initialRotation = props.viewer && props.viewer.rotation !== undefined
+      ? props.viewer.rotation
+      : props.rotation || 0;
+
     this.state = {
-      rotation: 0,
+      rotation: initialRotation,
     };
+  }
+
+  componentDidMount() {
+    // コンポーネントがマウントされた後に初期回転値を適用
+    const { updateViewport, windowId } = this.props;
+    const { rotation } = this.state;
+    if (updateViewport && windowId) {
+      updateViewport(windowId, { rotation, immediately: true });
+    }
   }
 
   handleChange() {
@@ -175,9 +184,6 @@ MiradorRotation.propTypes = {
   t: PropTypes.func,
   updateViewport: PropTypes.func,
   updateWindow: PropTypes.func,
-  viewConfig: PropTypes.shape({
-    rotation: PropTypes.number,
-  }),
   viewer: PropTypes.shape({
     rotation: PropTypes.number,
   }),
@@ -185,6 +191,7 @@ MiradorRotation.propTypes = {
   size: PropTypes.shape({
     width: PropTypes.number,
   }),
+  rotation: PropTypes.number,
 };
 
 MiradorRotation.defaultProps = {
@@ -193,9 +200,9 @@ MiradorRotation.defaultProps = {
   t: () => { },
   updateViewport: () => { },
   updateWindow: () => { },
-  viewConfig: {},
   viewer: {},
   size: {},
+  rotation: 0,
 };
 
 // Export without wrapping HOC for testing.

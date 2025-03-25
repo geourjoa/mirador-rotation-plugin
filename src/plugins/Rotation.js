@@ -40,6 +40,7 @@ const RotationToggleButton = styled(MiradorMenuButton)(({
 class Rotation extends Component {
   constructor(props) {
     super(props);
+    console.log('Rotation', props);
     this.state = {
       open: props.open,
     };

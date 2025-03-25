@@ -7,11 +7,13 @@ const config = {
     {
       rotationEnabled: true,
       manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-
+      rotation: -90,
     }, {
       rotationEnabled: false,
       manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
-    },],
+      rotation: 90,
+    },
+  ],
   theme: {
     palette: {
       primary: {
