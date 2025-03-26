@@ -1,138 +1,98 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { MiradorMenuButton } from '@nakamura196/mirador/dist/es/src/components/MiradorMenuButton';
+import { MiradorMenuButton } from '@nakamura196/mirador';
 import Slider from '@mui/material/Slider';
 import { styled, alpha } from '@mui/material/styles';
+import LinearScaleIcon from '@mui/icons-material/LinearScale';
 
 const SliderContainer = styled('div')(({ small, theme: { palette } }) => ({
   backgroundColor: alpha(palette.shades.main, 0.8),
   borderRadius: 25,
-  top: 48,
-  marginTop: 2,
-  position: 'absolute',
   height: 150,
-  zIndex: 100,
   marginLeft: 2,
+  marginTop: 2,
   padding: [[2, 7, 2, 7]],
+  position: 'absolute',
   ...(small && {
-    top: 'auto',
-    right: 48,
-    width: 150,
     height: 'auto',
-    marginTop: -46,
     marginBottom: 2,
+    marginTop: -46,
     padding: [[4, 2, 4, 2]],
+    right: 48,
+    top: 'auto',
+    width: 150,
   }),
+  top: 48,
+  zIndex: 100,
 }));
 
 const RotationToggleButton = styled(MiradorMenuButton)(({
   theme: { palette },
-  ownerState: { open, toggled },
+  ownerState: { open },
 }) => ({
-  ...(toggled && {
-    backgroundColor: `${alpha(palette.getContrastText(palette.shades.main), 0.25)} !important`,
-  }),
   ...(open && {
     backgroundColor: `${alpha(palette.getContrastText(palette.shades.main), 0.1)} !important`,
   }),
 }));
 
-class Rotation extends Component {
-  constructor(props) {
-    super(props);
-    console.log('Rotation', props);
-    this.state = {
-      open: props.open,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-  }
+const Rotation = ({
+  label, value, windowId, small = false, onChange,
+}) => {
+  const max = 180
+  const min = -180
+  const [open, setOpen] = useState(false);
 
-  handleClick() {
-    const { value, variant } = this.props;
-    switch (variant) {
-      case 'toggle':
-        this.handleChange({}, value);
-        break;
-      default:
-        this.setState((state) => ({
-          open: !state.open,
-        }));
-    }
-  }
+  const handleClick = () => {
+    setOpen((prevState) => !prevState);
+  };
 
-  // eslint-disable-next-line
-  handleChange(e, val) {
-    const { onChange } = this.props;
-    onChange(val);
-  }
+  const id = `${windowId}`;
 
-  render() {
-    const {
-      children, label, max, min, value, type, variant, windowId, small,
+  return (
+    <div style={{ display: 'inline-block' }}>
+      <RotationToggleButton
+        id={`${id}-label`}
+        aria-label={label}
+        onClick={handleClick}
+        aria-expanded={open}
+        aria-controls={id}
+        ownerState={{ open }}
+      >
+        <LinearScaleIcon />
+      </RotationToggleButton>
 
-    } = this.props;
-    const { open } = this.state;
-
-    const toggled = variant === 'toggle' && value > 0;
-
-    const id = `${windowId}-${type}`;
-
-    return (
-      <div style={{ display: 'inline-block' }}>
-        <RotationToggleButton
-          id={`${id}-label`}
-          aria-label={label}
-          onClick={this.handleClick}
-          aria-expanded={open}
-          aria-controls={id}
-          ownerState={{ toggled, open }}
+      {open && (
+        <SliderContainer
+          id={id}
+          aria-labelledby={`${id}-label`}
+          className="MuiPaper-elevation4"
+          small={small}
         >
-          {children}
-        </RotationToggleButton>
-
-        {open && (
-          <SliderContainer
-            id={id}
-            aria-labelledby={`${id}-label`}
-            className="MuiPaper-elevation4"
-            small={small}
-          >
-            <Slider
-              orientation={small ? 'horizontal' : 'vertical'}
-              min={min}
-              max={max}
-              value={value}
-              valueLabelDisplay="on"
-              onChange={this.handleChange}
-            />
-          </SliderContainer>
-        )}
-      </div>
-    );
-  }
-}
+          <Slider
+            orientation={small ? 'horizontal' : 'vertical'}
+            min={min}
+            max={max}
+            value={value}
+            valueLabelDisplay="on"
+            onChange={(e, val) => onChange(val)}
+          />
+        </SliderContainer>
+      )}
+    </div>
+  );
+};
 
 Rotation.propTypes = {
   children: PropTypes.node.isRequired,
   label: PropTypes.string.isRequired,
-  min: PropTypes.number,
   max: PropTypes.number,
+  min: PropTypes.number,
   onChange: PropTypes.func.isRequired,
-  open: PropTypes.bool,
   small: PropTypes.bool,
   type: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   variant: PropTypes.string,
   windowId: PropTypes.string.isRequired,
-};
-
-Rotation.defaultProps = {
-  min: 0,
-  max: 100,
-  open: false,
-  small: false,
-  variant: 'slider',
 };
 
 export default Rotation;

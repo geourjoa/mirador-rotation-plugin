@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import LayersIcon from '@mui/icons-material/Layers';
+import TuneSharpIcon from '@mui/icons-material/TuneSharp';
+import { useTranslation } from '@nakamura196/mirador';
 
 const MiradorRotationMenuItem = ({
-  enabled = true, handleClose, t, updateWindow, windowId,
+  enabled = true,
+  handleClose,
+  updateWindow,
+  windowId,
 }) => {
+  const { t } = useTranslation();
+
   const handleClickOpen = () => {
     handleClose();
     updateWindow(windowId, { rotationEnabled: !enabled });
@@ -16,10 +22,10 @@ const MiradorRotationMenuItem = ({
   return (
     <MenuItem onClick={handleClickOpen}>
       <ListItemIcon>
-        <LayersIcon />
+        <TuneSharpIcon />
       </ListItemIcon>
-      <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-        {enabled ? t('hide') : t('show')}
+      <ListItemText>
+        { enabled ? t('hide') : t('show') }
       </ListItemText>
     </MenuItem>
   );
@@ -28,13 +34,8 @@ const MiradorRotationMenuItem = ({
 MiradorRotationMenuItem.propTypes = {
   enabled: PropTypes.bool,
   handleClose: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
-};
-
-MiradorRotationMenuItem.defaultProps = {
-  enabled: true,
 };
 
 export default MiradorRotationMenuItem;

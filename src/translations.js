@@ -6,6 +6,7 @@ const translations = {
     show: 'Show rotation',
     progress: 'Show angle',
     init: 'Init',
+    revert: 'Revert',
   },
   ja: {
     collapse_open: '回転を畳む',
@@ -14,6 +15,7 @@ const translations = {
     show: '回転を表示',
     progress: '角度を表示',
     init: '初期化',
+    revert: 'リセット',
   },
 };
 
