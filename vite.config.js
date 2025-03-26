@@ -11,7 +11,7 @@ import pkg from './package.json';
 */
 export default defineConfig({
 
-  base: process.env.GITHUB_PAGES ? (process.env.BASE_PATH || '/mirador-rotation/') : '/',
+  base: process.env.GITHUB_PAGES ? (process.env.BASE_PATH || '/mirador-rotation-plugin/') : '/',
 
   ...(
     

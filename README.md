@@ -2,7 +2,7 @@
 
 ![Node.js CI](https://github.com/nakamura196/mirador-rotation-plugin/actions/workflows/node.js.yml/badge.svg)
 
-`mirador-rotation` is a [Mirador 3](https://github.com/projectmirador/mirador) plugin that enables the rotation of images at any angle.
+`mirador-rotation` is a [Mirador 4](https://github.com/projectmirador/mirador) plugin that enables the rotation of images at any angle.
 
 <img src="assets/demo.gif" width="100%" title="Mirador rotation example">
 
@@ -34,7 +34,7 @@ const config = {
 
 ## 📖 Installing `mirador-rotation`
 
-`mirador-rotation` requires an instance of Mirador 3. See the [Mirador wiki](https://github.com/ProjectMirador/mirador/wiki) for examples of embedding Mirador within an application. See the [live demo's index.js](https://github.com/nakamura196/mirador-rotation-plugin/blob/main/demo/src/index.js) for an example of importing the `mirador-rotation` plugin and configuring the adapter.
+`mirador-rotation` requires an instance of Mirador 4. See the [Mirador wiki](https://github.com/ProjectMirador/mirador/wiki) for examples of embedding Mirador within an application. See the [live demo's index.js](https://github.com/nakamura196/mirador-rotation-plugin/blob/main/demo/src/index.js) for an example of importing the `mirador-rotation` plugin and configuring the adapter.
 
 ## 📣 Contribute
 
