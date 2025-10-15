@@ -43,3 +43,7 @@ Mirador's development, design, and maintenance is driven by community needs and 
 ## 🏅 Sponsors
 
 [Become a sponsor](https://opencollective.com/mirador-rotation-plugin#sponsor)
+
+
+Demo trigger
+
